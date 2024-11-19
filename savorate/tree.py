@@ -1,8 +1,5 @@
 import collections
 import csv
-import numpy as np
-import pandas as pd
-from pandas import IndexSlice as idx
 from typing import (
     cast,
     Any,
