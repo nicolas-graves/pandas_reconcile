@@ -1,24 +1,19 @@
-import collections
-import csv
 import numpy as np
 import pandas as pd
 from pandas import IndexSlice as idx
 from typing import (
     cast,
-    Any,
     Callable,
-    Deque,
-    Dict,
     List,
     Hashable,
-    Iterable,
     Optional,
-    Set,
     Tuple,
+    Union,
 )
-from treelib import Tree, Node
+from treelib import Tree
 from .tree import node_names
 from functools import reduce
+from toolz import valmap, valfilter
 
 
 def partition_1(
@@ -101,7 +96,9 @@ def total_aggregate(frame, tree, region=slice(None)):
     )
 
 
-def check_sums(frame, tree: Tree, region=slice(None), tol=3 * 10 ** (-1), omit=None):
+def check_sums(
+    frame: pd.DataFrame, tree: Tree, region=slice(None), tol=3 * 10 ** (-1), omit=None
+) -> list:
     """
     Return a list of tuples indicating suspicious data entries which
     might not follow the sums as defined in dictionary.
@@ -130,14 +127,11 @@ def check_sums(frame, tree: Tree, region=slice(None), tol=3 * 10 ** (-1), omit=N
     return errors.loc[errors > tol].to_dict()
 
 
-def assoc_set(s: Set, value: Any) -> Set:
-    """Return the set with the updated value."""
-    s2 = s.copy()
-    s2.update(value)
-    return s2
-
-
-def assoc_df(df, value, do_sum=False):
+def assoc_df(
+    df: Union[pd.DataFrame, pd.Series],
+    value: Union[pd.DataFrame, pd.Series],
+    do_sum: bool = False,
+):
     """Return the pd.DataFrame or pd.Series with the updated value."""
     d2 = df.copy()
     value.name = df.name
@@ -155,7 +149,14 @@ def assoc_df(df, value, do_sum=False):
     return d2
 
 
-def distribute_flows(frame, flow, dictionary, product, country, do_sum=True):
+def distribute_flows(
+    frame: pd.DataFrame,
+    flow,
+    dictionary: dict,
+    product: str,
+    country,
+    do_sum: bool = True,
+):
     """Distributes flow according to the dictionary, using leaves under each node."""
     if not frame.index.is_unique:
         duplicated_index = frame.index[frame.index.duplicated()]

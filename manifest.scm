@@ -32,5 +32,6 @@
    '("python-mypy"
      "python-pandas"
      "python-pytest"
+     "python-toolz"
      "python-wrapper"
      "which"))))
