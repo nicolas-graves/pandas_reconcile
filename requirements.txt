@@ -1,0 +1,4 @@
+mypy
+pandas
+pytest
+-e lib/treelib
