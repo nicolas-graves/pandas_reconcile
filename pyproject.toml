@@ -1,0 +1,27 @@
+[build-system]
+requires = ["flit-core"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "savorate"
+version = "0.1.0"
+description = "Pandas flavor for simple and correct hierachical aggregation"
+requires-python = ">=3.10"
+dependencies = [
+    "pandas>=2.0",
+    "pandas_flavor",
+    "toolz",
+    "treelib",
+]
+
+[project.optional-dependencies]
+dev = [
+    "mypy",
+    "pytest>=7",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.pycodestyle]
+max-line-length = 89
