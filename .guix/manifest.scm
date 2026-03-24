@@ -1,0 +1,9 @@
+(specifications->manifest
+ '("python-mypy"
+   "python-pandas"
+   "python-pandas-flavor"
+   "python-pytest"
+   "python-toolz"
+   "python-treelib"
+   "python-wrapper"
+   "which"))
