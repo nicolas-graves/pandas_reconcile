@@ -3,7 +3,7 @@ requires = ["flit-core"]
 build-backend = "flit_core.buildapi"
 
 [project]
-name = "tree_sum"
+name = "pandas_reconcile"
 version = "0.1.0"
 description = "Pandas flavor for simple and correct hierachical aggregation"
 requires-python = ">=3.10"

@@ -1,6 +1,6 @@
 import pytest
 from treelib import Tree
-import tree_sum.tree as stree
+import pandas_reconcile.tree as stree
 
 
 @pytest.fixture

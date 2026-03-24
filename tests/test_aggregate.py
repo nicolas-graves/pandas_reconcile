@@ -5,11 +5,11 @@ import pytest
 import itertools
 from functools import partial, reduce
 from treelib import Tree, Node
-from tree_sum.tree import (
+from pandas_reconcile.tree import (
     dict_to_tree,
     node_names,
 )
-from tree_sum.aggregate import (
+from pandas_reconcile.aggregate import (
     df_aggregate,
     total_aggregate,
     nested_aggregate,
