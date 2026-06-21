@@ -5,11 +5,8 @@ import pandas_flavor as pf
 from typing import (
     cast,
     Callable,
-    List,
     Hashable,
     Optional,
-    Tuple,
-    Union,
 )
 from treelib import Tree
 from .tree import dict_to_tree, node_names
@@ -18,8 +15,8 @@ from toolz import valmap, valfilter
 
 
 def partition_1(
-    predicate: Callable[[str], bool], input_list: List[str]
-) -> Tuple[str, List[str]]:
+    predicate: Callable[[str], bool], input_list: list[str]
+) -> tuple[str, list[str]]:
     trues, falses = [], []
     for k in range(len(input_list)):
         if predicate(input_list[k]):
@@ -31,7 +28,7 @@ def partition_1(
 
 def get_dicname_and_other_levels(
     frame: pd.DataFrame, tree: Tree
-) -> Tuple[str, List[str]]:
+) -> tuple[str, list[str]]:
     try:
         value = node_names(tree.leaves())[0]
     except Exception:
@@ -135,8 +132,8 @@ def check_sums(
 
 
 def assoc_df(
-    df: Union[pd.DataFrame, pd.Series],
-    value: Union[pd.DataFrame, pd.Series],
+    df: pd.DataFrame | pd.Series,
+    value: pd.DataFrame | pd.Series,
     do_sum: bool = False,
 ):
     """Return the pd.DataFrame or pd.Series with the updated value."""
@@ -198,7 +195,7 @@ Duplicated index: {duplicated_index}"
     return assoc_df(frame, proportions * future_value, do_sum)
 
 
-def valremove(dic, names: List[str]):
+def valremove(dic, names: list[str]):
     """Remove names from lists in dic."""
     dic = valmap(lambda val: list(filter(lambda x: x not in names, val)), dic)
     return valfilter(lambda x: x != [], dic)

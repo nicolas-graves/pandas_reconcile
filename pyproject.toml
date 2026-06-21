@@ -22,6 +22,8 @@ dev = [
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "--mypy"
 
 [tool.pycodestyle]
 max-line-length = 89
