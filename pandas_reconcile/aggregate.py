@@ -1,3 +1,4 @@
+import logging
 import numpy as np
 import pandas as pd
 from pandas import IndexSlice as idx
@@ -9,6 +10,8 @@ from treelib import Tree
 from .tree import dict_to_tree, node_names, tree_omit
 from functools import reduce
 from toolz import valmap, valfilter
+
+logger = logging.getLogger(__name__)
 
 
 def partition_1(
@@ -28,22 +31,22 @@ def get_dicname_and_other_levels(
 ) -> tuple[str, list[str]]:
     try:
         value = node_names(tree.leaves())[0]
-    except Exception:
+    except IndexError as e:
         raise ValueError(
             f"Couldn't find a valid value in {frame.index.names}\
  for \n{tree}."
-        )
+        ) from e
 
     def is_current_level(level):
         return value in frame.index.get_level_values(level).unique()
 
     try:
         return partition_1(is_current_level, frame.index.names)
-    except Exception:
+    except IndexError as e:
         raise ValueError(
             f"Couldn't find a valid level in {frame.index.names}\
  for {value} in \n{tree}."
-        )
+        ) from e
 
 
 def df_aggregate(
@@ -207,7 +210,7 @@ def valremove(dic, names: list[str]):
 
 def update_flow(flow_checks, d, fill):
     flow, product, unit, country = fill
-    print("Distributing", flow, product, country)
+    logger.info("Distributing %s %s %s", flow, product, country)
     return distribute_flows(
         d.loc[
             idx[
