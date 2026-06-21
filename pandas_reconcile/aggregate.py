@@ -18,11 +18,11 @@ def partition_1(
     predicate: Callable[[str], bool], input_list: list[str]
 ) -> tuple[str, list[str]]:
     trues, falses = [], []
-    for k in range(len(input_list)):
-        if predicate(input_list[k]):
-            trues.append(input_list[k])
+    for item in input_list:
+        if predicate(item):
+            trues.append(item)
         else:
-            falses.append(input_list[k])
+            falses.append(item)
     return trues[0], falses
 
 
@@ -181,8 +181,9 @@ Duplicated index: {duplicated_index}"
             frame.loc[idx[target_leaves, product, unit, country]] / previous_sum
         )
     else:  # case where only np.nans
+        n_leaves = len(target_leaves)
         proportions = pd.Series(
-            data=np.array([1 / len(target_leaves)] * int(len(target_leaves))),
+            data=np.array([1 / n_leaves] * n_leaves),
             index=frame.loc[
                 idx[
                     target_leaves,
