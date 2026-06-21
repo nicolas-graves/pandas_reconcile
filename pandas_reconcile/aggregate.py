@@ -98,7 +98,12 @@ def nested_aggregate(frame, dic: dict, region=slice(None)):
 
 
 def check_sums(
-    frame: pd.DataFrame, tree: Tree, region=slice(None), tol=3 * 10 ** (-1), omit=None
+    frame: pd.DataFrame,
+    tree: Tree,
+    region=slice(None),
+    tol=3 * 10 ** (-1),
+    omit=None,
+    geo_level: Optional[str] = None,
 ) -> list:
     """
     Return a list of tuples indicating suspicious data entries which
@@ -110,12 +115,16 @@ def check_sums(
     else:
         new_tree = tree
     dicname, levels = get_dicname_and_other_levels(frame, new_tree)
-    df = frame.xs(region, level="geo", drop_level=False)
+
+    if geo_level is None:
+        geo_level = levels[0] if levels else frame.index.names[-1]
+
+    df = frame.xs(region, level=geo_level, drop_level=False)
     calculated = total_aggregate(df, new_tree, region)
     # Isolate only aggregated sums from the calculated frame.
     calculated = calculated.loc[
         calculated.index.get_level_values(dicname).isin(new_tree.nodes.keys())
-    ].xs(region, level="geo", drop_level=False)
+    ].xs(region, level=geo_level, drop_level=False)
     values = df.to_frame().join(calculated, how="inner", rsuffix="_r")
     errors = (values.iloc[:, 0] - values.iloc[:, 1]).squeeze() ** 2 / list(
         map(lambda x: max(1, x**2), values.iloc[:, 0])
