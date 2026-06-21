@@ -60,6 +60,42 @@ def test_assoc_df_with_sum(raw_eb):
     pd.testing.assert_series_equal(A, B)
 
 
+def test_assoc_df_no_mutation(raw_eb):
+    """Verify assoc_df does not mutate its input arguments."""
+    A, checks = raw_eb
+    B = A.copy()
+
+    # Store original names
+    original_a_name = A.name
+    original_b_name = B.name
+
+    # Call assoc_df with inputs that have None as name
+    value = B.loc[idx[["TO"], :, :, :]]
+    original_value_name = value.name
+
+    assoc_df(A, value)
+
+    # Verify inputs were not mutated
+    assert A.name == original_a_name, f"A.name changed from {original_a_name} to {A.name}"
+    assert value.name == original_value_name, f"value.name changed from {original_value_name} to {value.name}"
+
+
+def test_assoc_df_no_mutation_with_none_name():
+    """Verify assoc_df doesn't mutate inputs even when names are None."""
+    # Create Series with None names
+    s1 = pd.Series([1, 2, 3], index=['a', 'b', 'c'], name=None)
+    s2 = pd.Series([10, 20, 30], index=['a', 'b', 'c'], name=None)
+
+    original_s1_name = s1.name
+    original_s2_name = s2.name
+
+    assoc_df(s1, s2)
+
+    # Verify inputs were not mutated
+    assert s1.name == original_s1_name, f"s1.name was mutated to {s1.name}"
+    assert s2.name == original_s2_name, f"s2.name was mutated to {s2.name}"
+
+
 def test_df_aggregate_siec(raw_eb):
     A, checks = raw_eb
     B = A.copy()

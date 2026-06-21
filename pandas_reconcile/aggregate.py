@@ -139,9 +139,11 @@ def assoc_df(
 ):
     """Return the pd.DataFrame or pd.Series with the updated value."""
     d2 = df.copy()
+    value = value.copy()
     value.name = df.name
     if value.name is None:
-        df.name, value.name = 0, 0
+        value.name = 0
+        d2.name = 0
     if do_sum:
         value = pd.Series(
             data=np.nansum([value.to_numpy(), d2.loc[value.index]], axis=0),
