@@ -3,13 +3,10 @@ import pandas as pd
 from pandas import IndexSlice as idx
 import pandas_flavor as pf
 from typing import (
-    cast,
-    Callable,
-    Hashable,
-    Optional,
+    cast, Callable, Hashable, Optional,
 )
 from treelib import Tree
-from .tree import dict_to_tree, node_names
+from .tree import dict_to_tree, node_names, tree_omit
 from functools import reduce
 from toolz import valmap, valfilter
 
@@ -109,12 +106,7 @@ def check_sums(
     Adjust tolerance using parameter tol.
     """
     if omit is not None:
-        new_tree = Tree(tree.subtree(cast(str, tree.root)), deep=True)
-        if tree.root in omit:
-            new_tree.update_node(cast(str, tree.root), identifier="ROOT")
-        for o in omit:
-            if new_tree.contains(o):
-                new_tree.link_past_node(o)
+        new_tree = tree_omit(tree, omit)
     else:
         new_tree = tree
     dicname, levels = get_dicname_and_other_levels(frame, new_tree)

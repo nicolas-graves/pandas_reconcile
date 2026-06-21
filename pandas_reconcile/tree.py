@@ -39,6 +39,6 @@ def node_names(nodes: list[Node]):
 def tree_omit(t: Tree, to_omit: list[str]) -> Tree:
     new_tree = Tree(t.subtree(cast(str, t.root)), deep=True)
     for o in to_omit:
-        if new_tree.contains(o):
+        if new_tree.contains(o) and o != new_tree.root:
             new_tree.remove_node(o)
     return new_tree
